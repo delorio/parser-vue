@@ -3,14 +3,22 @@
 import Rating from "@/components/Rating.vue";
 import Comments from "../components/Comments.vue";
 import axios from "axios";
-import {reactive, onMounted, proxyRefs} from "vue";
+import {reactive, onMounted, proxyRefs, ref} from "vue";
+import store from "@/store/index.js";
 
 const token = window.localStorage.getItem('Authorization')
-let data = reactive({})
+let data = reactive([])
+let getData = ref('')
 
 onMounted(()=>{
   comments()
+  getUrlData()
 })
+async function getUrlData(){
+  getData.value = await store.dispatch('getUrlData')
+
+}
+
 async function comments(){
   try{
     const response = await axios.get('http://localhost:8083/api/reviews',{
@@ -19,12 +27,10 @@ async function comments(){
       }
     })
     data.value = response.data
-
   }
   catch (e){
     console.log(e.message)
   }
-
 
 }
 </script>
@@ -32,16 +38,24 @@ async function comments(){
 <template>
   <div id="wrapper">
 
-  <div><div class="yandexMap">
+  <div>
+    <a :href="getData.url">
+    <div class="yandexMap">
+
     <div class="wrapper-svg">
+
       <svg width="12px" height="15px" viewBox="0 0 32 32" fill="none">
         <path d="M16 2C10.477 2 6 6.477 6 12C6 19.5 16 30 16 30C16 30 26 19.5 26 12C26 6.477 21.523 2 16 2Z"
               fill="#FF0000"/>
         <circle cx="16" cy="12" r="4" fill="white"/>
       </svg>
     </div>
+
+
     <div class="content">Яндекс Карты</div>
-  </div></div>
+  </div>
+    </a>
+  </div>
 
   <div class="wrapper-block">
     <div class="comments">
@@ -49,7 +63,7 @@ async function comments(){
 
     </div>
     <div class="rating">
-      <Rating></Rating>
+      <Rating :values="getData"></Rating>
     </div>
   </div>
   </div>
@@ -68,6 +82,9 @@ async function comments(){
 .rating{
   width: 30.2%;
 }
+a{
+  text-decoration: none;
+}
 
 .yandexMap {
   text-align: center;
@@ -79,6 +96,7 @@ async function comments(){
   border-radius: 8px;
   font-size: 12px;
  border: solid #DCE4EA 1px;
+  cursor: pointer;
 }
 
 .wrapper-svg{

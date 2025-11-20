@@ -3,10 +3,9 @@
 import Star from "@/components/Star.vue";
 import {onMounted} from "vue";
 const props = defineProps({
-  data: Array
+  data: Object
 })
 onMounted(()=>{
-  console.log(props.data)
 })
 function colorData (i){
   if (parseFloat(props.data.rating)>= i) return true

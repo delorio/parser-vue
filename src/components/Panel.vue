@@ -39,7 +39,7 @@ watch(route, (newValue, oldValue) => {
 
 <style scoped>
 #wrapper{
- min-height: 100%;
+  height: 100vw;
   background-color:#F6F8FA ;
   font-family: Mulish,serif;
   font-size: 16px;

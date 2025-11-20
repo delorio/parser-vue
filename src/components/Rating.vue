@@ -7,33 +7,21 @@ const token = window.localStorage.getItem('Authorization')
 const stars = ref('')
 const gradeCount = ref('')
 
+const props = defineProps(
+    {values: Object}
+)
+
 function colorData (i){
-  if (parseFloat(stars.value)>= i) return true
-
+  if (parseFloat(props.values.rating)>= i) return true
 }
-async function getDataUrl() {
-  const response = await axios.get('http://localhost:8083/api/getUrlData', {
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
-  })
 
-  const data = response.data
-
-  stars.value = data.rating
-  gradeCount.value = data.grade_count
-
-}
-onMounted(()=>{
-  getDataUrl()
-})
 </script>
 
 
 <template>
 <div id="wrapper">
   <div class="content_rating">
-    <div class="rating">{{stars}}</div>
+    <div class="rating">{{values.rating}}</div>
  <div v-for="i in 5" class="stars">
    <Star
        :color="colorData(i) ?  '#FBBC04' : '#ffffff'"
@@ -43,7 +31,7 @@ onMounted(()=>{
  </div>
  </div>
   <div class="line"> </div>
-  <div class="rating_count">Всего отзывов: {{gradeCount}}</div>
+  <div class="rating_count">Всего отзывов: {{values.grade_count}}</div>
 
 </div>
 </template>
